@@ -1,5 +1,6 @@
 package com.starkindustries.databasewithjetpackcompose.Frontend.Screens
 
+import android.content.Context
 import android.widget.Space
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,9 +33,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.starkindustries.databasewithjetpackcompose.Frontend.Routes.Routes
+import com.starkindustries.databasewithjetpackcompose.Keys.Keys
 
 @Composable
 fun LoginScreen(navController: NavController){
+
+    var context = LocalContext.current.applicationContext
+    var sharedPreferences = context.getSharedPreferences(Keys.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+    var editor = sharedPreferences.edit()
 
     var username by rememberSaveable{
         mutableStateOf("")
@@ -87,8 +94,10 @@ fun LoginScreen(navController: NavController){
                 .height(40.dp))
 
             Button(onClick = {
-
-
+                editor.putBoolean(Keys.LOGIN_STATUS,true)
+                editor.commit()
+                editor.apply()
+                navController.navigate(Routes.DashboardScreen.route)
             }
             , shape = RectangleShape
             , modifier = Modifier
@@ -105,7 +114,7 @@ fun LoginScreen(navController: NavController){
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-
+                    navController.navigate(Routes.SignupScreen.route)
                 }
             , verticalAlignment = Alignment.CenterVertically
             , horizontalArrangement = Arrangement.Center) {
