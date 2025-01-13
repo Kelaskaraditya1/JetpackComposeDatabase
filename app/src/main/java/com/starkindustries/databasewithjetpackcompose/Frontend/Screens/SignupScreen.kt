@@ -30,8 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.starkindustries.databasewithjetpackcompose.Database.Database
 import com.starkindustries.databasewithjetpackcompose.Frontend.Routes.Routes
 import com.starkindustries.databasewithjetpackcompose.Keys.Keys
+import com.starkindustries.databasewithjetpackcompose.Model.Student
 
 @Composable
 fun SignupScreen(navController: NavController){
@@ -70,7 +72,7 @@ fun SignupScreen(navController: NavController){
             , fontSize = 25.sp
             , modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp)
+                .padding(top = 30.dp)
             , textAlign = TextAlign.Center)
         Column(modifier = Modifier
             .fillMaxSize()
@@ -176,12 +178,15 @@ fun SignupScreen(navController: NavController){
                 .height(40.dp))
 
             Button(onClick = {
-
-                editor.putBoolean(Keys.LOGIN_STATUS,true)
-                editor.commit()
-                editor.apply()
-                navController.navigate(Routes.DashboardScreen.route)
-
+                var student = Student(studentId,name,username,email,department,password)
+                var database = Database(context,Keys.DATABASE_NAME,Keys.VERSION)
+                database.getCount()
+                if(database.insertData(student)==1){
+                    editor.putBoolean(Keys.LOGIN_STATUS,true)
+                    editor.commit()
+                    editor.apply()
+                    navController.navigate(Routes.DashboardScreen.route)
+                }
             }
                 , shape = RectangleShape
                 , modifier = Modifier
