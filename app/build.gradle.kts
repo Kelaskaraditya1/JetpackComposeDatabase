@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.devtools.ksp") version "1.6.0-1.0.1" // Ensure version matches the KSP requirement
+    id("org.jetbrains.kotlin.kapt")
+
 }
 
 android {
@@ -50,7 +53,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -66,5 +68,18 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    // Navigation for Jetpack Compose
     implementation("androidx.navigation:navigation-compose:2.8.5")
+
+    // Room dependencies
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1") // For Kotlin projects using KAPT
+
+    // Optional - Kotlin Extensions and Coroutines support
+    implementation("androidx.room:room-ktx:2.6.1")
+
+    // Optional - If you're using Kotlin Symbol Processing (KSP) instead of KAPT
+    ksp("androidx.room:room-compiler:2.6.1")
 }
